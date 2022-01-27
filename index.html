@@ -268,7 +268,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2022-01-27 18:40:57 / 修改时间：20:44:46" itemprop="dateCreated datePublished" datetime="2022-01-27T18:40:57+08:00">2022-01-27</time>
+              <time title="创建时间：2022-01-27 18:40:57 / 修改时间：22:23:46" itemprop="dateCreated datePublished" datetime="2022-01-27T18:40:57+08:00">2022-01-27</time>
             </span>
 
           
@@ -284,37 +284,36 @@
       
           <p><img src="https://cdn.jsdelivr.net/gh/shawn697/picBed/20220127204408.png"></p>
 <h1 id="正则表达式"><a href="#正则表达式" class="headerlink" title="正则表达式"></a>正则表达式</h1><p>正则表达式是一组由字母和符号组成的特殊文本，它可以用来从文本中找出满足你想要的格式的句子。</p>
-<h2 id="1-限定符"><a href="#1-限定符" class="headerlink" title="1. 限定符"></a>1. 限定符</h2><ul>
-<li>a* a出现0次或者多次</li>
-<li>a+ a出现1次或者多次</li>
-<li>a? a出现0次或者多次</li>
-<li>a{n} a出现n次</li>
-<li>a{6} a出现6次</li>
-<li>a{2,6} a出现2-6次</li>
-<li>a{2,} a出现大于2次</li>
-<li>(ab) ab为整体<h2 id="2-或运算符"><a href="#2-或运算符" class="headerlink" title="2. 或运算符"></a>2. 或运算符</h2></li>
-<li>(a|b) 匹配a或者b</li>
-<li>(ab)|(cd) 匹配ab或者cd<h2 id="3-字符类"><a href="#3-字符类" class="headerlink" title="3. 字符类"></a>3. 字符类</h2></li>
-<li>[abc] 匹配abc</li>
-<li>[a-c] 匹配abc</li>
-<li>[a-fA-F0-9] 匹配大小写字符和数字</li>
-<li>[^0-9] 匹配非数字字符<h2 id="4-元字符"><a href="#4-元字符" class="headerlink" title="4. 元字符"></a>4. 元字符</h2></li>
-<li>\d 匹配数字字符</li>
-<li>\D 匹配非数字字符</li>
-<li>\w 匹配单词字符</li>
-<li>\W 匹配非单词字符</li>
-<li>\s 匹配空白符(包含换行和tab)</li>
-<li>\S 匹配非空白字符</li>
-<li>. 匹配任意字符</li>
-<li>\bdog\b \b标记字符边界</li>
-<li>^ 匹配行首</li>
-<li>$ 匹配行尾<h2 id="5-贪婪-匹配机制"><a href="#5-贪婪-匹配机制" class="headerlink" title="5. 贪婪/匹配机制"></a>5. 贪婪/匹配机制</h2>在限定符后面加上?，则为懒惰模式；在限定符后面不加?，则为贪婪模式</li>
-<li>&lt;.+&gt; 贪婪匹配任意字符</li>
-</ul>
+<h2 id="1-限定符"><a href="#1-限定符" class="headerlink" title="1. 限定符"></a>1. 限定符</h2> <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">a*</span><br><span class="line">a出现0次或者多次</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">a+ </span><br><span class="line">a出现1次或者多次</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">a? </span><br><span class="line">a出现0次或者多次</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">a&#123;n&#125; </span><br><span class="line">a出现n次</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">a&#123;6&#125; </span><br><span class="line">a出现6次</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">a&#123;2,6&#125; </span><br><span class="line">a出现2-6次</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">a&#123;2,&#125; </span><br><span class="line">a出现大于2次</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(ab) </span><br><span class="line">ab为整体</span><br></pre></td></tr></table></figure>
+<h2 id="2-或运算符"><a href="#2-或运算符" class="headerlink" title="2. 或运算符"></a>2. 或运算符</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(a|b) </span><br><span class="line">匹配a或者b</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(ab)|(cd) </span><br><span class="line">匹配ab或者cd</span><br></pre></td></tr></table></figure>
+<h2 id="3-字符类"><a href="#3-字符类" class="headerlink" title="3. 字符类"></a>3. 字符类</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[abc] </span><br><span class="line">匹配abc</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[a-c] </span><br><span class="line">匹配abc</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[a-fA-F0-9] </span><br><span class="line">匹配大小写字符和数字</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[^0-9] </span><br><span class="line">匹配非数字字符</span><br></pre></td></tr></table></figure>
+<h2 id="4-元字符"><a href="#4-元字符" class="headerlink" title="4. 元字符"></a>4. 元字符</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">\d </span><br><span class="line">匹配数字字符</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">\D </span><br><span class="line">匹配非数字字符</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">\w </span><br><span class="line">匹配单词字符</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">\W </span><br><span class="line">匹配非单词字符</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">\s </span><br><span class="line">匹配空白符(包含换行和tab)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">\S </span><br><span class="line">匹配非空白字符</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">. </span><br><span class="line">匹配任意字符</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">\bdog\b </span><br><span class="line">\b标记字符边界</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">^ </span><br><span class="line">匹配行首</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ </span><br><span class="line">匹配行尾</span><br></pre></td></tr></table></figure>
+<h2 id="5-贪婪-匹配机制"><a href="#5-贪婪-匹配机制" class="headerlink" title="5. 贪婪/匹配机制"></a>5. 贪婪/匹配机制</h2><p>在限定符后面加上?，则为懒惰模式；在限定符后面不加?，则为贪婪模式</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;.+&gt; </span><br><span class="line">贪婪匹配任意字符</span><br></pre></td></tr></table></figure>
+
 <p>匹配最长的以开始位置开始，以结束位置结束的字符串<br><img src="https://cdn.jsdelivr.net/gh/shawn697/picBed/20220127203957.png"></p>
-<ul>
-<li>&lt;.+?&gt; 懒惰匹配任意字符</li>
-</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;.+?&gt; </span><br><span class="line">懒惰匹配任意字符</span><br></pre></td></tr></table></figure>
+
 <p>匹配尽可能少的字符<br><img src="https://cdn.jsdelivr.net/gh/shawn697/picBed/20220127204035.png"></p>
 <p>留白待补充</p>
 
