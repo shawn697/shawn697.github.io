@@ -186,7 +186,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2022/01/28/%E4%B8%AD%E8%8B%B1%E6%96%87%E5%88%86%E8%AF%8D%E5%8F%8A%E5%AE%9E%E7%8E%B0/" class="post-title-link" itemprop="url">中英文分词及实现</a>
+            <a href="/2022/01/28/%E4%B8%AD%E8%8B%B1%E6%96%87%E5%88%86%E8%AF%8D%E5%8F%8A%E5%AE%9E%E7%8E%B0/" class="post-title-link" itemprop="url">中文分词及实现</a>
         </h2>
 
         <div class="post-meta">
@@ -195,10 +195,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2022-01-28 15:05:42 / 修改时间：15:33:26" itemprop="dateCreated datePublished" datetime="2022-01-28T15:05:42+08:00">2022-01-28</time>
+              <time title="创建时间：2022-01-28 15:05:42" itemprop="dateCreated datePublished" datetime="2022-01-28T15:05:42+08:00">2022-01-28</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-01-30 11:24:38" itemprop="dateModified" datetime="2022-01-30T11:24:38+08:00">2022-01-30</time>
+              </span>
 
           
 
@@ -212,7 +218,32 @@
 
       
           <p><img src="https://cdn.jsdelivr.net/gh/shawn697/picBed/20220127204408.png"></p>
-<h1 id="中英文分词及实现"><a href="#中英文分词及实现" class="headerlink" title="中英文分词及实现"></a>中英文分词及实现</h1><p>分词是自然语言处理文本预处理最基本的一部分，所谓分词就是将一个句子划分为多个小的<br>单词或词汇，每个词汇是最基本的语言单位。</p>
+<h1 id="中文分词方法"><a href="#中文分词方法" class="headerlink" title="中文分词方法"></a>中文分词方法</h1><p>词是最小的能够独立活动的有意义的语言成分，英文单词之间是以空格作为自然分界符的，<br>可以比较容易的进行分词处理，而汉语是以字为基本的书写单位，词语之间没有明确的区分标记，因此中文分词是中文信<br>息处理的基础和关键。</p>
+<h2 id="1-基于规则的分词方法"><a href="#1-基于规则的分词方法" class="headerlink" title="1. 基于规则的分词方法"></a>1. 基于规则的分词方法</h2><ul>
+<li>正向最大匹配</li>
+</ul>
+<p>正向最大匹配法（Maximum Match Method，MM 法）是指从左向右按最大原则与词典里面<br>的词进行匹配。假设词典中最长词是 $m$ 个字，那么从待切分文本的最左边取  $m$  个<br>字符与词典进行匹配，如果匹配成功，则分词。如果匹配不成功，那么取 $𝑚−1$ 个字符与词<br>典匹配，一直取直到成功匹配为止。</p>
+<blockquote>
+<p>例子:<br>句子: 我们都喜欢在办公室敲代码<br>字典: 我们 都 喜欢 在办公室 敲代码<br>MM法思路:<br>1.找出字典最长分词长度4<br>2.使用 我们都喜 进行匹配，匹配失败<br>3.去掉喜，使用 我们都 进行匹配 匹配失败<br>4.去掉都，使用 我们 进行匹配 匹配成功<br>5.去掉匹配成功的部分，留下 都喜欢在办公室敲代码<br>6.重复执行1-5 直到完全匹配完成。</p>
+</blockquote>
+<ul>
+<li>逆向最大匹配 </li>
+</ul>
+<p>逆向最大匹配法（ Reverse Maximum Match Method, RMM 法）的原理与正向法<br>基本相同，唯一不同的就是切分的方向与 MM 法相反。逆向法从文本末端开始匹配，<br>每次用末端的最长词长度个字符进行匹配。</p>
+<ul>
+<li>双向最大匹配</li>
+</ul>
+<p>双向最大匹配法（Bi-direction Matching Method ，BMM）<br>则是将正向匹配法得到的分词结果与逆向匹配法得到的分词结果进行比较，<br>然后按照最大匹配原则，选取次数切分最少的作为结果。</p>
+<h2 id="2-基于统计的分词方法"><a href="#2-基于统计的分词方法" class="headerlink" title="2. 基于统计的分词方法"></a>2. 基于统计的分词方法</h2><p>上面主要讲述了基于字典的分词方法，可以发现基于的字典的方法实现比较简单，<br>而且性能也还不错。但是其有一个缺点，那就是不能切分未登录词，<br>也就是不能切分字典里面没有的词。为解决这一问题，于是有学者提出了基<br>于统计的分词方法。</p>
+<ul>
+<li>语料统计方法</li>
+</ul>
+<p>对于语料统计方法可以这样理解：我们已经有一个由很多个文本组成的的语料库 D ，<br>假设现在对一个句子【我有一个苹果】进行分词。其中两个相连的字 【苹】【果】<br>在不同的文本中连续出现的次数越多，就说明这两个相连字很可能构成一个词【苹果】。<br>与此同时 【个】【苹】 这两个相连的词在别的文本中连续出现的次数很少，<br>就说明这两个相连的字不太可能构成一个词【个苹】。所以，我们就可以利<br>用这个统计规则来反应字与字成词的可信度。当字连续组合的概率高过一个临<br>界值时，就认为该组合构成了一个词语。</p>
+<ul>
+<li>序列标注方法</li>
+</ul>
+<p>序列标注方法则将中文分词看做是一个序列标注问题。首先，规定每个字<br>在一个词语当中有着 4 个不同的位置，词首 B，词中 M，词尾 E，单字<br>成词 S。我们通过给一句话中的每个字标记上述的属性，最后通过标注来确定分词结果。<br>在统计学习方法中，可以用于序列标注任务的方法有很多。例如，隐马尔可夫模型，条件随机场等。</p>
+<h2 id="3-jieba分词库"><a href="#3-jieba分词库" class="headerlink" title="3. jieba分词库"></a>3. jieba分词库</h2><p>学会看<a target="_blank" rel="noopener" href="https://pypi.org/project/jieba/">原始文档</a>是一个好习惯</p>
 
       
     </div>
