@@ -185,6 +185,103 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/02/23/RDD%E8%BF%90%E8%A1%8C%E5%8E%9F%E7%90%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="千古一帝">
+      <meta itemprop="description" content="一个勤勤恳恳的IT打工人">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="千古一帝的日常博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/02/23/RDD%E8%BF%90%E8%A1%8C%E5%8E%9F%E7%90%86/" class="post-title-link" itemprop="url">RDD运行原理</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-02-23 17:38:48 / 修改时间：22:49:45" itemprop="dateCreated datePublished" datetime="2022-02-23T17:38:48+08:00">2022-02-23</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Spark/" itemprop="url" rel="index"><span itemprop="name">Spark</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><img src="https://cdn.jsdelivr.net/gh/shawn697/picBed/20220127204408.png"></p>
+<h2 id="RDD设计背景"><a href="#RDD设计背景" class="headerlink" title="RDD设计背景"></a>RDD设计背景</h2><p>Hadoop-MapReduce技术的问题:  </p>
+<ul>
+<li>迭代次数多</li>
+<li>磁盘IO开销大（反复和磁盘进行数据交换）</li>
+<li>反复读写工作子集（大量处理中间结果）</li>
+<li>序列和反序列化开销（频繁的IO操作导致） <h2 id="RDD的概念"><a href="#RDD的概念" class="headerlink" title="RDD的概念"></a>RDD的概念</h2></li>
+<li>一个RDD是一个分布式对象集合，可分为多个分区，每个分区就是一个数据集片段，并且可以被保存在集群中的不同节点之上</li>
+<li>RDD提供一种高度受限的共享内存模型，即RDD是只读的，一旦创建不可修改，可以通过在其他RDD上执行确定的转换操作生成新的RDD来实现RDD数据处理。<br>许多RDD数据结构之间会形成相互的依赖关系，构成我们的DAG图（有向无环图）</li>
+</ul>
+<h2 id="RDD的操作"><a href="#RDD的操作" class="headerlink" title="RDD的操作"></a>RDD的操作</h2><p>一次只能针对RDD全集进行转换，是一种粗粒度的转换（所以针对细粒度修改存在局限）</p>
+<p>那么问题来了，限制这么多的数据结构，表达能力真的够吗？<br><img src="https://cdn.jsdelivr.net/gh/shawn697/picBed/20220223195452.png"><br>两种操作：  </p>
+<ul>
+<li>动作类型操作</li>
+<li>转换类型操作  </li>
+</ul>
+<p>RDD的转换类型操作只会记录轨迹，不会对数据进行真正的修改（惰性机制），这样可以有效避免产生大量的这中间量。<br><img src="https://cdn.jsdelivr.net/gh/shawn697/picBed/20220223201519.png"></p>
+<p>RDD提供如下转换操作：map,filter,groupBy,join</p>
+<h2 id="RDD的特点"><a href="#RDD的特点" class="headerlink" title="RDD的特点"></a>RDD的特点</h2><ul>
+<li>高效的容错性<br>现有的容错机制<br><img src="https://cdn.jsdelivr.net/gh/shawn697/picBed/20220223203959.png"><br>RDD的容错机制<br><img src="https://cdn.jsdelivr.net/gh/shawn697/picBed/20220223204056.png"><br>使用DAG架构，每一个节点都可以找到它的父节点，某个节点出错可以从它的父节点进行恢复。</li>
+<li>内存持久化，不需要序列化和反序列化<br>RDD将中间结果全都保存在内存中（除了发生shuffle操作），不进行大量的磁盘IO操作  </li>
+</ul>
+<h2 id="RDD之间的依赖关系"><a href="#RDD之间的依赖关系" class="headerlink" title="RDD之间的依赖关系"></a>RDD之间的依赖关系</h2><p>RDD节点之间存在相互依赖关系使用DAG来表示，根据父节点和子节点的对应关系进行依赖划分，划分为宽依赖和窄依赖，DAG框架中出现宽依赖，则根据宽依赖位置划分前后为两个stage。</p>
+<ul>
+<li><p>窄依赖：指父RDD的每个分区只被子RDD的一个分区所使用，子RDD分区通常对应常数个父RDD分区<br><img src="https://cdn.jsdelivr.net/gh/shawn697/picBed/20220223224202.png"></p>
+</li>
+<li><p>宽依赖：存在shuffle操作，父RDD的每个分区都可能被多个子RDD分区所使用，子RDD分区通常对应多个的父RDD分区<br><img src="https://cdn.jsdelivr.net/gh/shawn697/picBed/20220223224240.png"></p>
+</li>
+</ul>
+<p><strong>宽依赖</strong>不能进行流水线优化，<strong>窄依赖</strong>可以进行流水线优化（stage）<br><img src="https://cdn.jsdelivr.net/gh/shawn697/picBed/20220223224654.png"><br>所有相邻的窄依赖形成一个stage。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2022/02/23/Spark%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1%E5%92%8C%E5%9F%BA%E6%9C%AC%E6%B5%81%E7%A8%8B/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -210,7 +307,16 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2022-02-23 00:47:35 / 修改时间：01:46:16" itemprop="dateCreated datePublished" datetime="2022-02-23T00:47:35+08:00">2022-02-23</time>
+              <time title="创建时间：2022-02-23 00:47:35 / 修改时间：22:49:40" itemprop="dateCreated datePublished" datetime="2022-02-23T00:47:35+08:00">2022-02-23</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Spark/" itemprop="url" rel="index"><span itemprop="name">Spark</span></a>
+                </span>
             </span>
 
           
@@ -225,7 +331,7 @@
 
       
           <p><img src="https://cdn.jsdelivr.net/gh/shawn697/picBed/20220127204408.png"></p>
-<h1 id="Spark基本介绍"><a href="#Spark基本介绍" class="headerlink" title="Spark基本介绍"></a>Spark基本介绍</h1><p>Apache Spark是一个围绕速度、易用性和复杂分析构建的大数据处理框架，<br>最初在2009年由加州大学伯克利分校的AMPLab开发，并于2010年成为<br>Apache的开源项目之一。<br>Spark提供了一个全面、统一的框架用于管理各种有着不同性质（文本数据<br>、图表数据等）的数据集和数据源（批量数据或实时的流数据）的大数据处<br>理的需求。<br>Spark有如下优点：  </p>
+<h1 id="Spark基本介绍"><a href="#Spark基本介绍" class="headerlink" title="Spark基本介绍"></a>Spark基本介绍</h1><p>Apache Spark是一个围绕速度、易用性和复杂分析构建的大数据处理框架，最初在2009年由加州大学伯克利分校的AMPLab开发，并于2010年成为Apache的开源项目之一。Spark提供了一个全面、统一的框架用于管理各种有着不同性质（文本数据、图表数据等）的数据集和数据源（批量数据或实时的流数据）的大数据处<br>理的需求。<br>Spark有如下优点：  </p>
 <ul>
 <li><p>运行速度快</p>
 <blockquote>
@@ -401,7 +507,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-02-20 16:58:48" itemprop="dateModified" datetime="2022-02-20T16:58:48+08:00">2022-02-20</time>
+                <time title="修改时间：2022-02-23 22:49:43" itemprop="dateModified" datetime="2022-02-23T22:49:43+08:00">2022-02-23</time>
               </span>
 
           
@@ -415,7 +521,8 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="词袋模型和tf-idf算法"><a href="#词袋模型和tf-idf算法" class="headerlink" title="词袋模型和tf-idf算法"></a>词袋模型和tf-idf算法</h1><p>词袋模型和tf-idf算法是经典的两个文本表示算法，可以将一段文字，<br>一篇文章表示成一定长度的向量，该向量可用于后期的分类回归任务，<br>目前还有更简单的独热编码，以及词嵌入算法</p>
+          <p><img src="https://cdn.jsdelivr.net/gh/shawn697/picBed/20220127204408.png"></p>
+<h1 id="词袋模型和tf-idf算法"><a href="#词袋模型和tf-idf算法" class="headerlink" title="词袋模型和tf-idf算法"></a>词袋模型和tf-idf算法</h1><p>词袋模型和tf-idf算法是经典的两个文本表示算法，可以将一段文字，<br>一篇文章表示成一定长度的向量，该向量可用于后期的分类回归任务，<br>目前还有更简单的独热编码，以及词嵌入算法</p>
 <h2 id="1-词袋模型"><a href="#1-词袋模型" class="headerlink" title="1.词袋模型"></a>1.词袋模型</h2><p>词袋模型是最原始的一类特征集，忽略掉了文本的语法和语序，<br>用一组无序的单词序列来表达一段文字或者一个文档。可以这样理解，<br>把整个文档集的所有出现的词都丢进袋子里面，然后无序的排出来（去掉重复的）。<br>对每一个文档，按照词语出现的次数来表示文档。例如:  </p>
 <p>句子1：我/有/一个/苹果</p>
 <p>句子2：我/明天/去/一个/地方</p>
@@ -947,20 +1054,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">7</span>
+          <span class="site-state-item-count">8</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-count">3</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-count">6</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
